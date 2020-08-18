@@ -1780,6 +1780,7 @@ subroutine ice_shelf_save_restart(CS, Time, directory, time_stamped, filename_su
 
   if (present(directory)) then ; restart_dir = directory
   else ; restart_dir = CS%restart_output_dir ; endif
+
   call save_restart(restart_dir, Time, CS%grid, CS%restart_CSp, time_stamped)
 
 end subroutine ice_shelf_save_restart
