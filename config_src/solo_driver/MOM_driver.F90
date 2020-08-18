@@ -616,6 +616,7 @@ program MOM_main
          "End of MOM_main reached with unused buoyancy fluxes. "//&
          "For conservation, the ocean restart files can only be "//&
          "created after the buoyancy forcing is applied.")
+
     call save_restart(dirs%restart_output_dir, Time, grid, restart_CSp, GV=GV)
     if (use_ice_shelf) call ice_shelf_save_restart(ice_shelf_CSp, Time, &
                                 dirs%restart_output_dir)
