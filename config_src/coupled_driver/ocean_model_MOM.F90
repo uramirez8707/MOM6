@@ -746,6 +746,7 @@ subroutine ocean_model_save_restart(OS, Time, directory, filename_suffix)
 
   if (present(directory)) then ; restart_dir = directory
   else ; restart_dir = OS%dirs%restart_output_dir ; endif
+
   call save_restart(restart_dir, Time, OS%grid, OS%restart_CSp, GV=OS%GV)
 
   call forcing_save_restart(OS%forcing_CSp, OS%grid, Time, restart_dir)
