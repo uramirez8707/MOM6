@@ -1001,8 +1001,7 @@ subroutine forcing_save_restart(CS, G, Time, directory, time_stamped, &
 
   if (.not.associated(CS)) return
   if (.not.associated(CS%restart_CSp)) return
-  ! NOTE: use_fms2=.true. routes routine to fms2 IO interface
-  call save_restart(.true., directory, Time, G, CS%restart_CSp, time_stamped, use_fms2=.true.)
+  call save_restart( directory, Time, G, CS%restart_CSp, time_stamped, use_fms2=.true.)
 
 end subroutine forcing_save_restart
 
