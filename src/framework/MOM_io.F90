@@ -385,12 +385,11 @@ end subroutine create_file_old
 
 !> This routine opens a netcdf file in "write" or "overwrite" mode, registers the global diagnostic axes, and writes
 !! the axis data and metadata to the file
-subroutine create_file_fms2_filename(filename, vars, numVariables, use_fms2, register_time, G, DG, GV, checksums, &
+subroutine create_file_fms2_filename(filename, vars, numVariables, register_time, G, DG, GV, checksums, &
            is_restart)
   character(len=*),      intent(in)               :: filename !< full path to the netcdf file
   type(vardesc), dimension(:), intent(in)         :: vars !< structures describing the output
   integer,               intent(in)               :: numVariables !< number of variables to write to the file
-  logical,               intent(in) :: use_fms2  !< flag indicating whether to use this routine
   logical, optional, intent(in) :: register_time !< if .true., register a time dimension to the file
   type(ocean_grid_type),   optional, intent(in) :: G !< ocean horizontal grid structure; G or dG
                                                      !! is required if the new file uses any
