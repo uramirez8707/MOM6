@@ -466,7 +466,7 @@ subroutine create_file_fms2_filename(filename, vars, numVariables, register_time
 
     if (.not. check_if_open(fileObjDD)) &
       file_open_successDD=fms2_open_file(fileObjDD, filename_temp, trim(nc_mode), Domain%mpp_domain, &
-                                          is_restart=is_restart_file)
+                                          is_restart=is_restart_file, dont_add_res_to_filename=.true.)
   else
     ! get the pes associated with the file.
     !>\note this is required so that only pe(1) is identified as the root pe to create the file
@@ -479,7 +479,7 @@ subroutine create_file_fms2_filename(filename, vars, numVariables, register_time
 
     if (.not. check_if_open(fileObjNoDD)) &
       file_open_successNoDD=fms2_open_file(fileObjNoDD, filename_temp, trim(nc_mode), &
-                                           is_restart=is_restart_file, pelist=pelist)
+                                           is_restart=is_restart_file, pelist=pelist, dont_add_res_to_filename=.true.)
   endif
   ! allocate the output data variable dimension attributes
   allocate(dim_names(numVariables,4))
@@ -744,7 +744,7 @@ subroutine create_file_fms2_fileobj(filename, fileObjDD, vars, numVariables, reg
   if (.not. check_if_open(fileObjDD)) &
     !write(output_unit, '(A)'), "Create_file: Opening file ", trim(filename_temp)
     file_open_successDD=fms2_open_file(fileObjDD, filename_temp, trim(nc_mode), Domain%mpp_domain, &
-                                       is_restart=is_restart_file)
+                                       is_restart=is_restart_file, dont_add_res_to_filename=.true.)
   ! allocate the output data variable dimension attributes
   allocate(dim_names(numVariables,4))
   dim_names(:,:) = ""

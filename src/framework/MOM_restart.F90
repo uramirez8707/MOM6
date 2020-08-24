@@ -1934,9 +1934,12 @@ subroutine restore_state_fms2(filename, directory, day, G, CS)
     ! Open the restart file.
     if (.not.(check_if_open(fileObjRead))) &
       fileOpenSuccess=fms2_open_file(fileObjRead, trim(unit_path(n)), "read", &
-                                     G%domain%mpp_domain, is_restart=.true.)
-    if (fileOpenSuccess) &
+                                     G%domain%mpp_domain, is_restart=.true., dont_add_res_to_filename=.true.)
+    if (fileOpenSuccess) then
       call MOM_error(NOTE, "MOM_restart_fms2: MOM run restarted using : "//trim(unit_path(n)))
+    else
+      call MOM_error(FATAL, "MOM_restart_fms2: Error opening file: "//trim(unit_path(n)))
+    endif
 
     call get_dimension_size(fileObjRead, "Time", ntime)
 
@@ -2003,6 +2006,7 @@ subroutine restore_state_fms2(filename, directory, day, G, CS)
           missing_fields = missing_fields+1
           cycle
         endif
+        cycle
       endif
       ! Get the variable's "domain position."
       num_dims = 0
