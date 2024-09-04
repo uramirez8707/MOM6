@@ -1030,9 +1030,18 @@ subroutine step_MOM(forces_in, fluxes_in, sfc_state, Time_start, time_int_in, CS
 
   if (CS%ensemble_ocean) then
     ! store ensemble vector in odaCS
+    if (CS%debug) then
+      call MOM_thermo_chksum("Pre set_prior_tracer ", CS%tv, G, US, haloshift=0)
+    endif
     call set_prior_tracer(CS%Time, G, GV, CS%h, CS%tv, CS%odaCS)
     ! call DA interface
+    if (CS%debug) then
+      call MOM_thermo_chksum("Pre oda call ", CS%tv, G, US, haloshift=0)
+    endif
     call oda(CS%Time,CS%odaCS)
+    if (CS%debug) then
+      call MOM_thermo_chksum("Post oda call ", CS%tv, G, US, haloshift=0)
+    endif
     ! update the time for the next analysis step if needed
     call set_analysis_time(CS%Time,CS%odaCS)
   endif
