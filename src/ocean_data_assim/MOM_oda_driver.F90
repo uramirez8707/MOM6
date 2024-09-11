@@ -143,7 +143,6 @@ type, public :: ODA_CS ; private
                             !! remapping invoked by the ODA driver.  Values below 20190101 recover
                             !! the answers from the end of 2018, while higher values use updated
                             !! and more robust forms of the same expressions.
-  type(ocean_control_struct), pointer :: Ocean_increment =>NULL()
 end type ODA_CS
 
 
@@ -400,10 +399,6 @@ subroutine init_oda(Time, G, GV, US, diag_CS, CS)
 
   iOcean = size(CS%Ocean_posterior%T,1) ; jOcean = size(CS%Ocean_posterior%T,2)
   kOcean = size(CS%Ocean_posterior%T,3) ; ens_size = size(CS%Ocean_posterior%T,4)
-
-  allocate(CS%Ocean_increment)
-  allocate(CS%Ocean_increment%T(iOcean,jOcean,kOcean,ens_size))
-  allocate(CS%Ocean_increment%S(iOcean,jOcean,kOcean,ens_size))
 
 !  if (CS%write_obs) then
 !    temp_fid = open_profile_file("temp_"//trim(obs_file))
