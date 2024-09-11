@@ -143,6 +143,7 @@ type, public :: ODA_CS ; private
                             !! remapping invoked by the ODA driver.  Values below 20190101 recover
                             !! the answers from the end of 2018, while higher values use updated
                             !! and more robust forms of the same expressions.
+  type(ocean_control_struct), pointer :: Ocean_increment =>NULL()
 end type ODA_CS
 
 
@@ -185,6 +186,7 @@ subroutine init_oda(Time, G, GV, US, diag_CS, CS)
   character(len=80) :: remap_scheme
   character(len=80) :: bias_correction_file, inc_file
   integer :: default_answer_date  ! The default setting for the various ANSWER_DATE flags.
+  integer :: iOcean,jOcean,kOcean,ens_size
 
   if (associated(CS)) call MOM_error(FATAL, 'Calling oda_init with associated control structure')
   allocate(CS)
@@ -396,6 +398,13 @@ subroutine init_oda(Time, G, GV, US, diag_CS, CS)
 
   call cpu_clock_end(id_clock_oda_init)
 
+  iOcean = size(CS%Ocean_posterior%T,1) ; jOcean = size(CS%Ocean_posterior%T,2)
+  kOcean = size(CS%Ocean_posterior%T,3) ; ens_size = size(CS%Ocean_posterior%T,4)
+
+  allocate(CS%Ocean_increment)
+  allocate(CS%Ocean_increment%T(iOcean,jOcean,kOcean,ens_size))
+  allocate(CS%Ocean_increment%S(iOcean,jOcean,kOcean,ens_size))
+
 !  if (CS%write_obs) then
 !    temp_fid = open_profile_file("temp_"//trim(obs_file))
 !    salt_fid = open_profile_file("salt_"//trim(obs_file))
@@ -494,13 +503,8 @@ subroutine get_posterior_tracer(Time, CS, increment)
   if (present(increment)) get_inc = increment
 
   if (get_inc) then
-    iOcean = size(CS%Ocean_posterior%T,1) ; jOcean = size(CS%Ocean_posterior%T,2)
-    kOcean = size(CS%Ocean_posterior%T,3) ; ens_size = size(CS%Ocean_posterior%T,4)
-    allocate(Ocean_increment)
-    allocate(Ocean_increment%T(iOcean,jOcean,kOcean,ens_size))
-    allocate(Ocean_increment%S(iOcean,jOcean,kOcean,ens_size))
-    Ocean_increment%T = CS%Ocean_posterior%T - CS%Ocean_prior%T
-    Ocean_increment%S = CS%Ocean_posterior%S - CS%Ocean_prior%S
+    CS%Ocean_increment%T = CS%Ocean_posterior%T - CS%Ocean_prior%T
+    CS%Ocean_increment%S = CS%Ocean_posterior%S - CS%Ocean_prior%S
   endif
   ! It may be necessary to check whether the increment and ocean state have the
   ! same dimensionally rescaled units.
