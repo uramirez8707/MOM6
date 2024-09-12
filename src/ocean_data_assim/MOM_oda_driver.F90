@@ -185,7 +185,6 @@ subroutine init_oda(Time, G, GV, US, diag_CS, CS)
   character(len=80) :: remap_scheme
   character(len=80) :: bias_correction_file, inc_file
   integer :: default_answer_date  ! The default setting for the various ANSWER_DATE flags.
-  integer :: iOcean,jOcean,kOcean,ens_size
 
   if (associated(CS)) call MOM_error(FATAL, 'Calling oda_init with associated control structure')
   allocate(CS)
@@ -396,9 +395,6 @@ subroutine init_oda(Time, G, GV, US, diag_CS, CS)
   endif
 
   call cpu_clock_end(id_clock_oda_init)
-
-  iOcean = size(CS%Ocean_posterior%T,1) ; jOcean = size(CS%Ocean_posterior%T,2)
-  kOcean = size(CS%Ocean_posterior%T,3) ; ens_size = size(CS%Ocean_posterior%T,4)
 
 !  if (CS%write_obs) then
 !    temp_fid = open_profile_file("temp_"//trim(obs_file))
