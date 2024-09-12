@@ -501,9 +501,9 @@ subroutine get_posterior_tracer(Time, CS, increment)
   ! same dimensionally rescaled units.
   do m=1,CS%ensemble_size
     if (get_inc) then
-      call redistribute_array(CS%mpp_domain, Ocean_increment%T(:,:,:,m),&
+      call redistribute_array(CS%mpp_domain, CS%Ocean_increment%T(:,:,:,m),&
            CS%domains(m)%mpp_domain, CS%T_tend, complete=.true.)
-      call redistribute_array(CS%mpp_domain, Ocean_increment%S(:,:,:,m),&
+      call redistribute_array(CS%mpp_domain, CS%Ocean_increment%S(:,:,:,m),&
            CS%domains(m)%mpp_domain, CS%S_tend, complete=.true.)
     else
       call redistribute_array(CS%mpp_domain, CS%Ocean_posterior%T(:,:,:,m),&
