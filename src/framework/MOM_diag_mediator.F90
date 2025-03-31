@@ -259,7 +259,8 @@ type, public :: diag_ctrl
   type(time_type) :: time_end   !< The end time of the valid
                                 !! interval for any offered field.
   logical :: ave_enabled = .false. !< True if averaging is enabled.
-
+  logical :: use_modern_diag = .false. !< True if using the modern (2025.02) diag manager
+                                       !! diag_manager_nml:use_modern_diag must also be set to .true.
   !>@{ The following are 3D and 2D axis groups defined for output.  The names
   !! indicate the horizontal (B, T, Cu, or Cv) and vertical (L, i, or 1) locations.
   type(axes_grp) :: axesBL, axesTL, axesCuL, axesCvL
@@ -2049,6 +2050,8 @@ subroutine enable_averaging(time_int_in, time_end_in, diag_cs)
 ! This subroutine enables the accumulation of time averages over the specified time interval.
 
 !  if (num_file==0) return
+  if (diag_cs%use_modern_diag) call diag_send_complete_infra()
+
   diag_cs%time_int = time_int_in
   diag_cs%time_end = time_end_in
   diag_cs%ave_enabled = .true.
@@ -3451,6 +3454,11 @@ subroutine diag_mediator_init(G, GV, US, nz, param_file, diag_cs, doc_file_dir)
       endif
     endif
   endif
+
+  call get_param(param_file, mdl, 'USE_MODERN_DIAG', diag_cs%use_modern_diag, &
+                 'Use the modern (2025.02) diag manager with the diag yaml. '//&
+                 'diag_manager_nml:use_modern_diag must also be set to .TRUE.',  &
+                 default=.false.)
 
 end subroutine diag_mediator_init
 
